@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOT Kiếm Tiền</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      box-sizing: border-box;
+    }
+    .container {
+      margin: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      color: #1e7d32; /* Màu xanh lá cây */
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    .code {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1e7d32; /* Màu xanh lá cây */
+      background-color: #e9f5e9;
+      border: 1px solid #c1e0c1;
+      border-radius: 4px;
+      padding: 15px;
+      display: inline-block;
+      word-break: break-all;
+      cursor: pointer; /* Thay đổi con trỏ để người dùng biết có thể nhấp chuột */
+    }
+    .notification {
+      margin-top: 15px;
+      font-size: 16px;
+      color: #1e7d32; /* Màu xanh lá cây */
+    }
+    footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+    footer a {
+      color: #1e7d32; /* Màu xanh lá cây */
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+      .code {
+        font-size: 20px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>BOT Kiếm Tiền 💰</h1>
+    <p>Chào mừng bạn đến với dịch vụ BOT Kiếm Tiền! Dưới đây là mã CODE của bạn:</p>
+    <div class="code" id="code">
+      <%- codeReward %>
+    </div>
+    <div class="notification" id="notification"></div>
+    <footer>
+      <p>© 2024 Dịch Vụ BOT Kiếm Tiền. <a href="/csbm-dksd">Chính sách bảo mật & Điều khoản sử dụng</a> | <a href="mailto:kiemtienbot@gmail.com">Liên hệ</a></p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('code').addEventListener('click', () => {
+      const codeElement = document.getElementById('code');
+      const notification = document.getElementById('notification');
+      
+      // Tạo một thẻ input ẩn để sao chép mã
+      const tempInput = document.createElement('input');
+      tempInput.value = codeElement.textContent;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      
+      // Hiển thị thông báo
+      notification.textContent = 'Mã CODE đã được sao chép vào bộ nhớ tạm!';
+      
+      // Xóa thông báo sau 3 giây
+      setTimeout(() => {
+        notification.textContent = '';
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
