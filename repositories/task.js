@@ -12,6 +12,8 @@ import {
  } from '../services/index.js'
 import NGROK_URL from '../server.js'
 import crypto from 'crypto'
+import {typeTasks} from '../storages/index.js'
+import task from "../controllers/task.js";
 
 export const randomChar = async (length = 6) => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Tập ký tự cho mã OTP
@@ -32,24 +34,40 @@ export const randomChar = async (length = 6) => {
             };
         }
 
+        // Lấy tất cả các tasks
         let allTasks = await TaskModel.find().exec();
 
+        // Lọc tasks theo điều kiện ref.get(telegramId) === undefined hoặc false
         allTasks = allTasks.filter(task => 
             task.ref.get(telegramId) === undefined || task.ref.get(telegramId) === false
         );
 
-        const tasksByName = allTasks.reduce((acc, task) => {
-            const { nameTask } = task;
-            if (!acc[nameTask]) {
-                acc[nameTask] = 0;
+        // Tạo cấu trúc dữ liệu { typeTask: [{ nameTask: "", quantity: 4 }, {}]}
+        const tasksByType = allTasks.reduce((acc, task) => {
+            const { typeTask, nameTask } = task;
+
+            // Tạo cấu trúc cho từng typeTask nếu chưa có
+            if (!acc[typeTask]) {
+                acc[typeTask] = {};
             }
-            acc[nameTask] += 1; 
+
+            // Tạo hoặc cập nhật số lượng nameTask
+            if (!acc[typeTask][nameTask]) {
+                acc[typeTask][nameTask] = 0;
+            }
+            acc[typeTask][nameTask] += 1;
+
             return acc;
         }, {});
 
-        const result = Object.keys(tasksByName).map(nameTask => ({
-            nameTask,
-            quantity: tasksByName[nameTask],
+        // Chuyển đổi cấu trúc dữ liệu từ { typeTask: { nameTask: quantity } }
+        // thành { typeTask: [{ nameTask: "", quantity: 4 }, {}]}
+        const result = Object.keys(tasksByType).map(typeTask => ({
+            typeTask,
+            tasks: Object.keys(tasksByType[typeTask]).map(nameTask => ({
+                nameTask,
+                quantity: tasksByType[typeTask][nameTask],
+            })),
         }));
 
         return {
@@ -64,23 +82,59 @@ export const randomChar = async (length = 6) => {
         };
     }
 };
-
-const createTask = async (quantity, nameTask) => {
-    switch (nameTask) {
-        case 'shrinkMe':
-            return await createTask_shrinkMe(quantity)
-            break;
+const createTask = async (typeTask, quantity, nameTask, linkRef) => {
+    console.log(linkRef)
+    if (typeTask.toLowerCase() == typeTasks.SHORTENLINK.toLowerCase()) {
+        return await createTask_SHORTENLINK(nameTask, quantity)
+    }else if (typeTask.toLowerCase() == typeTasks.REGISTERACCOUNT.toLowerCase()) {
+        return await createTask_REGISTERACCOUNT(nameTask, linkRef)
+    }
     
-        default:
-            return {
-                success: false,
-                message: 'Tên nhiệm vụ không có trong hệ thống',
-            }
-            break;
+    else {
+        return {
+            success: false,
+            message: 'Loại nhiệm vụ không hợp lệ',
+        }
     }
 };
-
-const createTask_shrinkMe = async (quantity) => {
+const createTask_REGISTERACCOUNT = async (nameTask, linkRef) => {
+    try {
+        let newTask = new TaskModel( {
+            shortLink:linkRef,
+            code: await randomChar(12),
+            nameTask,
+            typeTask: typeTasks.REGISTERACCOUNT
+        })
+        await newTask.save()
+        print(`Có nhiệm vụ đăng ký tài khoản từ ${nameTask} được khởi tạo`, options.blue.underline)
+        return {
+            success: true,
+            message: `Tạo nhiệm vụ ref thành công`,
+            data: newTask,
+        };
+    }catch (e){
+        if (e.code == 11000) {
+            return {
+                success: false,
+                message: 'Link nhiệm vụ đã tồn tại',
+            }
+        }
+        return {
+            success: false,
+            message: 'Có lõi xảy ra khi tạo nhiệm vụ',
+        }
+    }
+}
+const createTask_SHORTENLINK = async (nameTask, quantity) => {
+    let creator = null
+    if (nameTask == 'shrinkMe') {
+        creator = ShrinkMeIOService
+    }else {
+        return {
+            success: false,
+            message: 'Tên nhiệm vụ không có trong hệ thống',
+        }
+    }
     let data = [];
     try {
         // Chuyển đổi quantity thành số nguyên
@@ -98,11 +152,12 @@ const createTask_shrinkMe = async (quantity) => {
         for (let i = 0; i < parsedQuantity; i++) {
             let code = await randomChar(12)
             let shortLink = `${NGROK_URL.NGROK_URL}/task/completed/${code}/`;
-            let response_data = await ShrinkMeIOService.createShortLink(shortLink)
+            let response_data = await creator.createShortLink(shortLink)
             let newTask = new TaskModel({
                 shortLink: response_data.shortenedUrl,
                 code,
-                nameTask: 'shrinkMe',
+                nameTask,
+                typeTask: typeTasks.SHORTENLINK
             });
 
             await newTask.save();
@@ -139,10 +194,18 @@ const signTask = async ({telegramId}) => {
     }
     let allTask = await TaskModel.find().exec()
     console.log(allTask)
-    if (!allTask || allTask.length === 0) {
+    if (!allTask || allTask.length === 0)  {
         return {
             success: false,
             message: 'Server havenot Task',
+        }
+    }
+    for (let task of allTask) {
+        if (task.ref.get(telegramId) == false) {
+            return {
+                success: true,
+                data: task
+            }
         }
     }
     allTask = allTask.filter(task => {
@@ -224,9 +287,25 @@ const validateCodeReward = async ({telegramId, code}) => {
     }
 }
 
+const deleteTask = async ({idTask}) =>  {
+    let task = await TaskModel.deleteOne({_id:idTask}).exec()
+    if (!task) {
+        return {
+            success: false,
+            message: 'Task not found',
+        }
+    }
+    return {
+        success: true,
+        message: 'Xóa task thành công',
+    }
+}
+
+
 export default {
     validateCodeReward,
     createTask,
     signTask,
     getQuantityTaskForUser,
+    deleteTask,
 };

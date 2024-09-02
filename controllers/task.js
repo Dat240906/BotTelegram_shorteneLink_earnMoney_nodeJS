@@ -9,8 +9,10 @@ import codeReward from "../services/codeReward.js"
 
 const createTask = async (req, res) => {
     let nameTask = req.body.nameTask 
+    let typeTask = req.body.typeTask 
     let quantity = req.body.quantity
-    let response = await TaskRepository.createTask(quantity, nameTask)
+    let linkRef = req.body.linkRef
+    let response = await TaskRepository.createTask(typeTask, quantity, nameTask, linkRef)
     if (response.success) {
         return res.status(statusCode.OK).json({
             success: true,
@@ -56,6 +58,11 @@ const showCompletedCodeReward = async (req, res) => {
     return res.render('codeReward', {codeReward})
  
 }
+const deleteTask = async (req, res) => {
+    let idTask = req.params.idTask
+    let response = await TaskRepository.deleteTask({idTask})
+    return res.send(response)
+}
 
 const validateTask = async (req, res) => {
     console.log(req.body)
@@ -71,4 +78,5 @@ export default {
     signTask,
     showCompletedCodeReward,
     validateTask,
+    deleteTask,
 }

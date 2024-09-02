@@ -1,8 +1,16 @@
 import mongoose, { Schema, Types } from 'mongoose';
 import * as dotenv from 'dotenv'
+import {typeTasks} from '../storages/index.js'
 dotenv.config()
 // Định nghĩa schema cho Task
+
+
 const taskSchema = new Schema({
+  typeTask: {
+    type: String,
+    required: true,
+    enum: [typeTasks.SHORTENLINK, typeTasks.REGISTERACCOUNT]
+  },
   nameTask: {
     type: String,
     required: true,
@@ -19,7 +27,7 @@ const taskSchema = new Schema({
   },
   reward: {
     type: Number,
-    default: 1000
+    default: 200
   },
   ref: {
     type: Map,
@@ -31,16 +39,26 @@ const taskSchema = new Schema({
   timestamps:true
 });
 
+const getRandomReward = () => {
+  const min = 100;
+  const max = Number(process.env.REWARD_SHRINKMEIO_TASK); // Chuyển đổi biến môi trường thành số
 
-taskSchema.post('save', (doc)=> {
-  switch (doc.nameTask) {
-    case 'shrinkMe':
-      doc.reward = process.env.REWARD_SHRINKMEIO_TASK
-      break;
+  if (isNaN(max)) {
+      throw new Error('REWARD_SHRINKMEIO_TASK không phải là một số hợp lệ');
+  }
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+taskSchema.pre('save', async function (next) {
   
+  switch (this.nameTask) {
+    case 'shrinkMe':
+      this.reward = getRandomReward()
+      next()
     default:
       break;
   }
+  
 })
 
 

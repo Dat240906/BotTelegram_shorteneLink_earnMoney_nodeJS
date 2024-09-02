@@ -8,10 +8,9 @@ const apiClient = axios.create({
     }
 });
 
-const addEmail = async ({telegramId, email}) => {
+const addEmail = async ({telegramId, code}) => {
     try {
-        const response = await apiClient.post('/users/add-email', { telegramId, email })
-        console.log(response.data)
+        const response = await apiClient.post('/task/validate', { telegramId, code })
         return response.data
     } catch (error) {
         return error.response.data

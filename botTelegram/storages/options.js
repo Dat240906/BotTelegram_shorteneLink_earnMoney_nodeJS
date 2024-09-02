@@ -16,7 +16,11 @@ const optionsButton = {
         ['↪️ Gửi lại mã OTP']
     ],
     tasks: [
+        ['💸 Nhận Nhiệm Vụ'],
         ['📝 Hướng Dẫn Nhiệm Vụ']
+    ],
+    signTask: [
+        ['🎁 Nhập CODE nhiệm vụ'],
     ]
 }
 

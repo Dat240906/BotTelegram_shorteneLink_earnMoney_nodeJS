@@ -8,13 +8,13 @@ const apiClient = axios.create({
     }
 });
 
-const signTaskForUser = async ({telegramId}) => {
+const getTasksForUser = async ({telegramId}) => {
     try {
-        const response = await apiClient.post('/task/sign', { telegramId })
+        const response = await apiClient.get(`/task/${telegramId}`)
         return response.data
     } catch (error) {
         return error.response.data
     }
 }
 
-export default signTaskForUser
+export default getTasksForUser

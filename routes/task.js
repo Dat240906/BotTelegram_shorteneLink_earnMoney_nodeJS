@@ -7,6 +7,9 @@ import NGROK_URL from '../server.js'
 
 const router = express.Router()
 
+router.delete('/:idTask', 
+    taskController.deleteTask
+)
 router.post('/create', 
     taskController.createTask
 )

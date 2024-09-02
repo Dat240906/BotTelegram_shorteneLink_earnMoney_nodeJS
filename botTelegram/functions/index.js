@@ -16,6 +16,8 @@ import {
     stateUsers
 } from '../storages/states.js'
 
+import task from './task.js'
+
 const handleMessage = async (bot, msg) => {
     let idUser = msg.from.id
     let message = await tools.getMessage(msg)
@@ -68,7 +70,19 @@ const handleMessage = async (bot, msg) => {
 
     }
 
-
+    // hiển thị tasks
+    else if (message.toLowerCase() == optionsButton.all[1][0].toLowerCase()) {
+        return task.showTasks(bot, msg)
+    }
+    // nhận nhiệm vụ
+    else if (message.toLowerCase() == optionsButton.tasks[0][0].toLowerCase()) {
+        return task.signTask(bot, msg)
+    }
+    // code nhiệm vụ
+    else if (message.toLowerCase() == optionsButton.signTask[0][0].toLowerCase()) {
+        stateUsers[idUser] = states.AWATING_CODE_TASK
+        return sendMessageDefault(bot, idUser, messages.reqCodeTask, optionsButton.null)
+    }
     else {
         if (stateUsers[idUser] == states.AWAITING_EMAIL) {
             // nếu chưa có email thì sẽ bắt nhập email
@@ -86,6 +100,9 @@ const handleMessage = async (bot, msg) => {
             return 
         }
         else if (stateUsers[idUser] == states.AWAITING_REPEAT_SEND_OTP) {
+        }
+        else if (stateUsers[idUser] == states.AWATING_CODE_TASK) {
+            return task.codeTask(bot, msg)
         }
         sendMessageDefault(bot, idUser, messages.elseMessage, optionsButton.all)
     }

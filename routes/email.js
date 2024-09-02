@@ -10,6 +10,7 @@ router.post('/send',
     emailController.sendEmail
 )
 
+
 router.post('/validate', 
     emailController.validateEmailForActiveAccount
 )
