@@ -22,8 +22,7 @@ const userSchema = new Schema({
   },
   email: {
     type:String,
-    unique: true,
-    default: '',
+    sparse : true,
     match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   },
   secretGetOtp: {
@@ -43,6 +42,26 @@ const userSchema = new Schema({
  
 }, {
   timestamps: true, // Thêm timestamps (createdAt và updatedAt) cho m��i document
+});
+
+
+userSchema.pre('save', async function (next) {
+  let email = this.email;
+  if (!email) return next();
+
+  try {
+    let existEmail = await mongoose.models.User.findOne({ email }).exec();
+    if (existEmail && existEmail.telegramId !== this.telegramId) {
+      return next({
+        code: 11000,
+        message: 'Email đã tồn tại',
+      });
+    }
+    next();
+  } catch (e) {
+    console.error("Lỗi trong quá trình pre save:", e);
+    next(e);  
+  }
 });
 
 // Tạo model User từ schema

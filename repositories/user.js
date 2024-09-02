@@ -66,6 +66,7 @@ const addEmail = async ({telegramId, email}) => {
     print(`Email của tài khoản [@${user.username}] đã được thay đổi thành ${email}`, options.cyan.underline);
     return { success: true,code:0 ,message: 'Thêm email thành công' };
   }catch (e) {
+    debugger
     if (e.code == 11000) {
       return { success: false, code:2, message: `Email đã tồn tại trên hệ thống` };
     }
