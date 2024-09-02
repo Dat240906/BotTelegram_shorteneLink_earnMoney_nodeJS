@@ -33,5 +33,4 @@ const validateEmailForActiveAccount = async (req, res) => {
 export default {
     sendEmail,
     validateEmailForActiveAccount,
-    autoSend,
 }
