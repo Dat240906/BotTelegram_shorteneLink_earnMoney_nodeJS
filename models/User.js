@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-
+import Bank from './Bank.js';
 
 // Định nghĩa schema cho User
 const userSchema = new Schema({
@@ -39,7 +39,11 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
- 
+  bank: {
+    type: Schema.Types.ObjectId,
+    ref: 'Bank',
+    sparse: true,
+  }
 }, {
   timestamps: true, // Thêm timestamps (createdAt và updatedAt) cho m��i document
 });

@@ -7,6 +7,7 @@ import {
   otpRouter,
   taskRouter,
   csbm_dksdRouter,
+  transactionsRouter,
 } from './routes/index.js';
 import {
   options, 
@@ -47,6 +48,7 @@ app.use('/email', emailServicesRouter);
 app.use('/otp', otpRouter);
 app.use('/task', taskRouter);
 app.use('/csbm-dksd', csbm_dksdRouter);
+app.use('/transactions', transactionsRouter);
 
 
 

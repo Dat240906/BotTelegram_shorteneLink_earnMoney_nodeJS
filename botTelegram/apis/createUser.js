@@ -7,7 +7,6 @@ const apiClient = axios.create({
         'Authorization': `Bearer ${process.env.API_ACCESS_SERVER}` 
     }
 });
-console.log(process.env.PORT)
 const createUser = async ({telegramId, username, name}) => {
     try {
         let res = await apiClient.get(`/users/${telegramId}`)

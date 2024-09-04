@@ -14,11 +14,19 @@ router.get('/', (req, res)  => {
 router.get('/:telegramId', 
     userController.getUserById
 )
+router.get('/bank/:telegramId', 
+    userController.getDataBank
+)
  
 router.post('/register', 
     userController.createUser
 )
-
+router.post('/add-bank', 
+    userController.addBank
+)
+router.post('/withdrawmoney', 
+    userController.withDrawMoney
+)
 
 router.post('/add-Email', 
     userController.addEmail

@@ -7,23 +7,24 @@ const transactionSchema = new Schema({
     ref: 'User',
     required: true,
   },
-  amount: {
+  money: {
     type: Number,
     required: true,
   },
-  type: {
-    type: String,
-    enum: ['credit', 'debit'],
+  bank: {
+    type: Schema.Types.ObjectId,
+    ref: 'Bank',
     required: true,
   },
-  description: {
+  status:{
     type: String,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+    enum: ['pending', 'success', 'fail'],
+    default: 'pending',
+  }
+},
+  { timestamps: true } 
+    
+);
 
 // Tạo model Transaction từ schema
 const TransactionModel = mongoose.model('Transaction', transactionSchema);

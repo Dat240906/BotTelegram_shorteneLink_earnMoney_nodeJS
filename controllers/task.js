@@ -65,7 +65,6 @@ const deleteTask = async (req, res) => {
 }
 
 const validateTask = async (req, res) => {
-    console.log(req.body)
     let response = await TaskRepository.validateCodeReward(req.body)
     return res.send(response)
 }

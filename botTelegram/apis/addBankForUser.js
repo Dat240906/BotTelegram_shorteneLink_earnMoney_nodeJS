@@ -8,14 +8,13 @@ const apiClient = axios.create({
     }
 });
 
-const addEmail = async ({telegramId, email}) => {
+const addBankForUser = async ({telegramId, typeBank, nameBank, numberAccountBank}) => {
     try {
-        const response = await apiClient.post('/users/update-email', { telegramId, email })
+        const response = await apiClient.post('users/add-bank', {telegramId, typeBank, nameBank, numberAccountBank})
         return response.data
     } catch (error) {
-        console.log('trả về từ addEmail.js %s', error.response.data)
         return error.response.data
     }
 }
 
-export default addEmail
+export default addBankForUser

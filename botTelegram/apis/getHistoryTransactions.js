@@ -8,14 +8,13 @@ const apiClient = axios.create({
     }
 });
 
-const addEmail = async ({telegramId, email}) => {
+const getHistoryTransactions = async ({idUser}) => {
     try {
-        const response = await apiClient.post('/users/update-email', { telegramId, email })
+        const response = await apiClient.get(`/transactions/${idUser}`)
         return response.data
     } catch (error) {
-        console.log('trả về từ addEmail.js %s', error.response.data)
         return error.response.data
     }
 }
 
-export default addEmail
+export default getHistoryTransactions

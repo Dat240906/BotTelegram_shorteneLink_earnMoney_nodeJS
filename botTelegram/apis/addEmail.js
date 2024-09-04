@@ -11,7 +11,6 @@ const apiClient = axios.create({
 const addEmail = async ({telegramId, email}) => {
     try {
         const response = await apiClient.post('/users/add-email', { telegramId, email })
-        console.log(response.data)
         return response.data
     } catch (error) {
         return error.response.data

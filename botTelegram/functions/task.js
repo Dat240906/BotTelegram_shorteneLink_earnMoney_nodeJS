@@ -19,7 +19,6 @@ import showAccount from './showAccount.js'
 const showTasks = async (bot, msg) => {
     let { telegramId, chatId, name} = await tools.getBaseInfo(msg)
     let response = await getTasksForUser({telegramId})
-    console.log(response.data)
     if (!response.success) {
         return sendMessageDefault(bot, chatId, messages.errorGetTasks, optionsButton.all)
     }
@@ -32,7 +31,6 @@ const showTasks = async (bot, msg) => {
         let dataTask = task.tasks
         debugger
         context += `\n⚡️ <b>${typeTask}:</b>`
-        console.log(dataTask)
         for (let detailTask of dataTask) {
             context += `\n   ↳ ${detailTask.nameTask}: <b>${detailTask.quantity}</b> nhiệm vụ`
         }
@@ -52,7 +50,6 @@ const showTasks = async (bot, msg) => {
 const signTask = async (bot, msg) => {
     let { telegramId, chatId} = await tools.getBaseInfo(msg)
     let response = await signTaskForUser({telegramId})
-    console.log(response)
     if (!response.success) {
         return sendMessageDefault(bot, chatId, messages.errorGetTasks, optionsButton.all)
     }
@@ -77,7 +74,6 @@ const codeTask = async (bot, msg) => {
     let { telegramId, chatId} = await tools.getBaseInfo(msg)
     let code = msg.text
     let response = await validateCodeTask({telegramId, code})
-    console.log(response)
     if (!response.success) {
         return sendMessageDefault(bot, chatId, messages.errorValidateCodeTask, optionsButton.all)
     }

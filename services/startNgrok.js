@@ -77,7 +77,7 @@ const startNgrok = async () => {
 
     // Nếu không có URL, chờ và thử lại
     if (!url) {
-      print("Thử lại để lấy URL từ Ngrok API...", options.info.bgcolor);
+      print("Thử lại để lấy URL từ Ngrok API...", options.red.bgcolor);
       await new Promise(resolve => setTimeout(resolve, 5000)); // Đợi thêm 5 giây trước khi thử lại
     }
   }

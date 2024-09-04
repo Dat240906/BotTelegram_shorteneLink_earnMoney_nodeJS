@@ -3,7 +3,6 @@ import statusCode from "../statusCode/statusCode.js"
 
 
 const getUserById = async (req, res) => {
-    console.log(req.params)
     let response = await UserRepository.getUserById(req.params)
     if (response.success) {
         res.status(statusCode.OK).json({
@@ -40,7 +39,6 @@ const createUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     let dataUser = req.params
-	console.log(dataUser)
     let response = await UserRepository.deleteUser(dataUser)
     if  (response.success) {
         res.status(statusCode.OK).json({
@@ -60,12 +58,39 @@ const deleteUser = async (req, res) => {
 
 const addEmail = async (req, res) => {
     let dataUser = req.body
-    console.log(req.body)
     let response = await UserRepository.addEmail(dataUser)
     if  (response.success) {
         res.status(statusCode.OK).json({
             success: true,
             data: response.message
+        })
+    }else {
+        res.status(statusCode.BAD_REQUEST).json({
+            success: false,
+            message: response.message
+        })
+    }
+}
+const addBank = async (req, res) => {
+    let response = await UserRepository.addBank(req.body)
+    if  (response.success) {
+        res.status(statusCode.OK).json({
+            success: true,
+            data: response.message
+        })
+    }else {
+        res.status(statusCode.BAD_REQUEST).json({
+            success: false,
+            message: response.message
+        })
+    }
+}
+const getDataBank = async (req, res) => {
+    let response = await UserRepository.getDataBank(req.params)
+    if  (response.success) {
+        res.status(statusCode.OK).json({
+            success: true,
+            data: response.data
         })
     }else {
         res.status(statusCode.BAD_REQUEST).json({
@@ -91,7 +116,21 @@ const updateEmail = async (req, res) => {
     }
 }
 
-
+const withDrawMoney = async (req, res) => {
+    let dataUser = req.body
+    let response = await UserRepository.withDrawMoney(dataUser)
+    if  (response.success) {
+        res.status(statusCode.OK).json({
+            success: true,
+            data: response.data
+        })
+    }else {
+        res.status(statusCode.BAD_REQUEST).json({
+            success: false,
+            message: response.message
+        })
+    }
+}
 
 export default {
     getUserById,
@@ -99,4 +138,7 @@ export default {
     deleteUser,
     addEmail,
     updateEmail,
+    addBank,
+    getDataBank,
+    withDrawMoney,
 }

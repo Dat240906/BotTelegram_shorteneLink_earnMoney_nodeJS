@@ -7,6 +7,10 @@ import changeEmailForUser from './changeEmailForUser.js'
 import signTaskForUser from './signTaskForUser.js'
 import getTasksForUser from './getTasksForUser.js'
 import validateCodeTask from './validateCodeTask.js'
+import getDataBank from './getDataBank.js'
+import withDrawMoneyForUser from './withDrawMoneyForUser.js'
+import getHistoryTransactions from './getHistoryTransactions.js'
+import addBankForUser from './addBankForUser.js'
 export {
     addEmail,
     createUser,
@@ -17,4 +21,8 @@ export {
     signTaskForUser,
     getTasksForUser,
     validateCodeTask,
+    getDataBank,
+    withDrawMoneyForUser,
+    getHistoryTransactions,
+    addBankForUser,
 }

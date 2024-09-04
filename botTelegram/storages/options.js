@@ -6,10 +6,10 @@ const optionsButton = {
     all:[
             ["👤 Thông Tin Tài Khoản", "🔐 Xác Thực Tài Khoản"],
             ["🎁 Nhiệm Vụ Kiếm Tiền"],
-            ["⚙️ Chỉnh Sửa Tài Khoản", "🛠 Hỗ Trợ Kỹ Thuật:"],
-            ['📰 Tin Tức Mới', '🔔 Thông Báo'],
+            ["💳 Chuyển Tiền", "💰 Rút Tiền"],
+            ["🛠 Hỗ Trợ Kỹ Thuật", "📜 Lịch Sử Giao Dịch"],
+            ['📰 Tin Tức Mới', '🏆 Thưởng Và Khuyến Mãi'],
             ['💬 Cộng Đồng'],
-            ['🏆 Thưởng Và Khuyến Mãi', '🎉 Sự Kiện Đặc Biệt']
         ],
     wrongOtp: [
         ["🔄 Thay đổi Email"],

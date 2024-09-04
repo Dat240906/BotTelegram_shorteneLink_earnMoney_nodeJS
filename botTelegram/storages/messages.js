@@ -25,6 +25,11 @@ Vui lòng cũng cấp mã OTP gửi tới Email:
     wrongOtp: '<b>❌ OTP không đúng, hãy nhập lại:</b>',
     trueOtp: '<b>✅ Xác thực Email thành công, bạn có thể làm nhiệm vụ kiếm tiền</b>',
     trueActive: '<b>✅ Tài khoản đã xác thực </b>',
+    trueWithDrawMoney: '<b>♻️ Đặt lệnh rút tiền thành công, đang chờ thanh toán </b>',
+    errorWithDrawMoney: '<b>❌ Số tiền chưa đủ điều kiện rút tối thiểu</b>',
+    errorMoney: '<b>❌ Vui lòng nhập số tiền hợp lệ: </b>',
+    errorAddBank: '<b>❌ Vui lòng nhập đúng định dạng: </b>',
+    errorGetHistoryTransactions: '<b>❌ Xảy ra lõi trong quá trình lấy lịch sử giao dịch </b>',
     // accountNotFound: '<b>❌ Tài khoản chưa được kích hoạt</b>'
 } 
 

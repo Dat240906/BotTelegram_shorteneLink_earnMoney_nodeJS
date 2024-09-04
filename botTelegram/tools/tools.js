@@ -19,7 +19,10 @@ const getBaseInfo = async (msg) => {
     let idUser = msg.from.id
     return {telegramId, username, name, chatId, idUser}
 }
-
+const isInteger = async (value) => {
+    const regex = /^\d+$/; // Chỉ chấp nhận các chữ số nguyên
+    return regex.test(value);
+}
 const maHoaEmail = async (email) => {
     if (!email) {
         return "Không có ❌";
@@ -56,10 +59,29 @@ const checkUser = async (msg) => {
     return res.data
 
 }
+const  formatDate = async (dateString) =>  {
+    const date = new Date(dateString);
+
+    // Lấy giờ, phút, giây
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+
+    // Lấy ngày, tháng, năm
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
+    const year = date.getUTCFullYear();
+
+    // Chuyển đổi thành định dạng mong muốn
+    return `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
+}
+
 export default {
     getName,
     getMessage,
     getBaseInfo,
     maHoaEmail,
     checkUser,
+    isInteger,
+    formatDate,
 }

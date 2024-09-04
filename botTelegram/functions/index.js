@@ -17,6 +17,9 @@ import {
 } from '../storages/states.js'
 
 import task from './task.js'
+import withDraw from './withDrawMoney.js'
+import showHistoryTransactions from './showHistoryTransactions.js'
+import addBank from './addBank.js'
 
 const handleMessage = async (bot, msg) => {
     let idUser = msg.from.id
@@ -27,7 +30,6 @@ const handleMessage = async (bot, msg) => {
 
     const  res_checkUser = await tools.checkUser(msg)
 
-    console.log(res_checkUser)
     // tất cả những lệnh bên dưới phải kích hoạt tài khoản mới có thể bấm được 
 
     if (message.toLowerCase() == optionsButton.activeAcount[0][0].toLowerCase()) {
@@ -49,7 +51,6 @@ const handleMessage = async (bot, msg) => {
 
 
         // kiểm tra nếu người dùng có email rồi
-        console.log(res_checkUser)
         if (res_checkUser.email) {
             return sendOtp(bot, msg)
         }
@@ -83,6 +84,23 @@ const handleMessage = async (bot, msg) => {
         stateUsers[idUser] = states.AWATING_CODE_TASK
         return sendMessageDefault(bot, idUser, messages.reqCodeTask, optionsButton.null)
     }
+    // rút tiền 
+    else if (message.toLowerCase() == optionsButton.all[2][1].toLowerCase()) {
+        stateUsers[idUser] = states.AWATING_NUMBER_MONEY_WITHDRAW
+        return withDraw.showInfoWhenWithDrawMoney(bot, msg)
+    }
+    //công đồng
+    else if (message.toLowerCase() == optionsButton.all[5][0].toLowerCase()) {
+        // gửi link chuyển đến nhóm telegram
+        
+        bot.sendMessage(msg.chat.id, `<a href="${process.env.GROUP_SUPPORT}">Cộng đồng của chúng tôi, nơi bạn có thể giao lưu, trò chuyện</a>`, {parse_mode:"html"})
+    }
+
+    // show lịch sủ giao dịch
+    else if (message.toLowerCase() == optionsButton.all[3][1].toLowerCase()) {
+        return showHistoryTransactions(bot, msg)
+    }
+
     else {
         if (stateUsers[idUser] == states.AWAITING_EMAIL) {
             // nếu chưa có email thì sẽ bắt nhập email
@@ -103,6 +121,16 @@ const handleMessage = async (bot, msg) => {
         }
         else if (stateUsers[idUser] == states.AWATING_CODE_TASK) {
             return task.codeTask(bot, msg)
+        }
+        else if (stateUsers[idUser] == states.AWATING_NUMBER_MONEY_WITHDRAW) {
+            // xử lí đầu vào số tiền muốn rút
+            withDraw.withDrawMoney(bot, msg)
+            return 
+        }
+        // theem banking
+        else if (stateUsers[idUser] == states.AWATING_INFO_BANKING) {
+            // xử lí đầu vào thông tin tài khoản ngân hàng
+            return addBank(bot, msg)
         }
         sendMessageDefault(bot, idUser, messages.elseMessage, optionsButton.all)
     }
