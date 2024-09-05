@@ -35,7 +35,10 @@ const handleMessage = async (bot, msg) => {
     if (message.toLowerCase() == optionsButton.activeAcount[0][0].toLowerCase()) {
         return activeAccount(bot, msg)
     }
-  
+    const response_checkUserInGroup = await tools.checkUserInGroup(bot, idUser)
+    if (response_checkUserInGroup?.data?.status == 'left' || response_checkUserInGroup.success == false) {
+        return sendMessageDefault(bot, msg.chat.id, messages.notInGroup, optionsButton.all)
+    }
     
     if (!res_checkUser) {
         return sendMessageDefault(bot, msg.chat.id, messages.accountNotActive, optionsButton.activeAcount)

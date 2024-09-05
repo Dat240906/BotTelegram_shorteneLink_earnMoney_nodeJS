@@ -1,5 +1,7 @@
 
+import * as dotenv from 'dotenv'
 
+dotenv.config()
 
 
 var messages = {
@@ -30,6 +32,7 @@ Vui lòng cũng cấp mã OTP gửi tới Email:
     errorMoney: '<b>❌ Vui lòng nhập số tiền hợp lệ: </b>',
     errorAddBank: '<b>❌ Vui lòng nhập đúng định dạng: </b>',
     errorGetHistoryTransactions: '<b>❌ Xảy ra lõi trong quá trình lấy lịch sử giao dịch </b>',
+    notInGroup: `<b>❌ Bạn chưa tham gia cộng đồng, hãy nhấn vào <a href="${process.env.GROUP_SUPPORT}">ĐÂY</a> để tham gia, sau đó thì có thể tiếp tục sử dụng dịch vụ</b>`,
     // accountNotFound: '<b>❌ Tài khoản chưa được kích hoạt</b>'
 } 
 

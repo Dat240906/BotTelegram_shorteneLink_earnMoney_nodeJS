@@ -8,6 +8,7 @@ dotenv.config();
 
 // Token bot của bạn
 const token = process.env.TOKEN_BOT;
+const idGroup = process.env.ID_GROUP
 
 const runBotTelegram = async () => {
   const bot = new TelegramBot(token, { polling: true });
@@ -19,7 +20,11 @@ const runBotTelegram = async () => {
   });
 
   bot.on('message', async (msg) => {
-    if (msg.chat.id < 0) {return}
+    if (msg.chat.id < 0) {
+      console.log(msg.chat.id)
+      
+      return 
+    }
     handleMessage(bot, msg)
   });
 

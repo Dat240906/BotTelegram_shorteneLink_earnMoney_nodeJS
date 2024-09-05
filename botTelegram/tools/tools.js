@@ -1,5 +1,8 @@
 import { getInfoUser } from "../apis/index.js"
 
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 
 const getName = async (msg) => {
@@ -80,6 +83,27 @@ const  maskStr = async (str, num) => {
     const maskedPart = '*'.repeat(str.length - num); // Thay thế phần còn lại bằng dấu sao
     return maskedPart + endPart;
 }
+
+const checkUserInGroup = async (bot, idUser)=> {
+
+    try {
+        const idGroup = process.env.ID_GROUP
+        const chatMember = await bot.getChatMember(idGroup, idUser)
+        console.log(chatMember)
+        return { 
+            success: true,
+            data: chatMember
+        }        
+
+    } catch (error) {
+        if (error.code == 'ETELEGRAM') {
+            return {
+                success: false,
+            }
+        }
+        console.log(error.message || error)      
+    }
+}
 export default {
     getName,
     getMessage,
@@ -89,4 +113,5 @@ export default {
     isInteger,
     formatDate,
     maskStr,
+    checkUserInGroup,
 }
