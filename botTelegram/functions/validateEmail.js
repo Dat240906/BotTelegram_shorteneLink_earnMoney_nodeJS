@@ -22,12 +22,10 @@ const validateEmail = async (bot, msg) => {
     let ischeckEmail = await kiemTraEmail(bot, msg)
     if (!ischeckEmail) {return}
     let res_getInfo = await getInfoUser({telegramId})
-    console.log(res_getInfo.data.email)
     if (res_getInfo.data.email) {
         await sendOtp(bot, msg)
     }
     let res = await addEmail({telegramId, email})
-    console.log(res)
     if (!res.success) {
         if (res.message == 'User đã có email rồi') {
             await sendOtp(bot, msg)
@@ -44,7 +42,6 @@ const validateOtp = async (bot, msg) => {
     let { telegramId, chatId, idUser} = await tools.getBaseInfo(msg)
     let otp = msg.text
     let res = await validateOtpForEmail({telegramId, otp})
-    console.log('gửi từ validateEmail.js %s', res)
     if (!res.success) {
         return sendMessageDefault(bot, chatId, messages.wrongOtp, optionsButton.wrongOtp)
     }
@@ -80,7 +77,6 @@ const changeEmail = async (bot, msg) => {
     let {telegramId, chatId, idUser} = await tools.getBaseInfo(msg) 
     let email = msg.text
     let res = await changeEmailForUser({telegramId, email})
-    console.log(res)
     if (res.success) {
         return await sendOtp(bot, msg)
     }

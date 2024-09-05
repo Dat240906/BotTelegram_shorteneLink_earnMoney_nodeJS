@@ -2,6 +2,7 @@ import {
     signTaskForUser,
     getTasksForUser,
     validateCodeTask,
+    getInfoUser,
 } from '../apis/index.js'
 import {tools} from "../tools/index.js"
 import { 
@@ -18,6 +19,10 @@ import showAccount from './showAccount.js'
 
 const showTasks = async (bot, msg) => {
     let { telegramId, chatId, name} = await tools.getBaseInfo(msg)
+    let infoUser_res = await getInfoUser({telegramId})
+    if (!infoUser_res.data.isActive) {
+        return sendMessageDefault(bot, chatId, messages.accountNotActive, optionsButton.all)
+    }
     let response = await getTasksForUser({telegramId})
     if (!response.success) {
         return sendMessageDefault(bot, chatId, messages.errorGetTasks, optionsButton.all)

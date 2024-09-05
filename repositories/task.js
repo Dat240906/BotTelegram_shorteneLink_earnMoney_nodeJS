@@ -7,13 +7,11 @@ import {
     options, 
     print,
 } from '../utils/logColor.js'
-import { 
-    ShrinkMeIOService
- } from '../services/index.js'
 import NGROK_URL from '../server.js'
 import crypto from 'crypto'
 import {typeTasks} from '../storages/index.js'
 import task from "../controllers/task.js";
+import {createShortenLink} from "../services/index.js";
 
 export const randomChar = async (length = 6) => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Tập ký tự cho mã OTP
@@ -83,7 +81,6 @@ export const randomChar = async (length = 6) => {
     }
 };
 const createTask = async (typeTask, quantity, nameTask, linkRef) => {
-    console.log(linkRef)
     if (typeTask.toLowerCase() == typeTasks.SHORTENLINK.toLowerCase()) {
         return await createTask_SHORTENLINK(nameTask, quantity)
     }else if (typeTask.toLowerCase() == typeTasks.REGISTERACCOUNT.toLowerCase()) {
@@ -128,8 +125,13 @@ const createTask_REGISTERACCOUNT = async (nameTask, linkRef) => {
 const createTask_SHORTENLINK = async (nameTask, quantity) => {
     let creator = null
     if (nameTask == 'shrinkMe') {
-        creator = ShrinkMeIOService
-    }else {
+        creator = createShortenLink.ShrinkMeIo
+    }else if (nameTask == 'yeuMoney') {
+        creator = createShortenLink.yeuMoney
+    }else if (nameTask == '8Link') {
+        creator = createShortenLink._8Link
+    }
+    else {
         return {
             success: false,
             message: 'Tên nhiệm vụ không có trong hệ thống',
@@ -152,9 +154,15 @@ const createTask_SHORTENLINK = async (nameTask, quantity) => {
         for (let i = 0; i < parsedQuantity; i++) {
             let code = await randomChar(12)
             let shortLink = `${NGROK_URL.NGROK_URL}/task/completed/${code}/`;
-            let response_data = await creator.createShortLink(shortLink)
+            let response_data = await creator(shortLink)
+            let shortenLink_byService =''
+            if (nameTask == '8Link'){
+                shortenLink_byService = response_data.shortened_url
+            }else {
+                shortenLink_byService = response_data.shortenedUrl
+            }
             let newTask = new TaskModel({
-                shortLink: response_data.shortenedUrl,
+                shortLink: shortenLink_byService,
                 code,
                 nameTask,
                 typeTask: typeTasks.SHORTENLINK
@@ -193,7 +201,6 @@ const signTask = async ({telegramId}) => {
         }
     }
     let allTask = await TaskModel.find().exec()
-    console.log(allTask)
     if (!allTask || allTask.length === 0)  {
         return {
             success: false,
@@ -234,8 +241,6 @@ const signTask = async ({telegramId}) => {
 const validateCodeReward = async ({telegramId, code}) => {
     let user = await UserModel.findOne({  telegramId }).exec()
     let task = await TaskModel.findOne({ code }).exec()
-    console.log(task)
-    console.log(code)
     if (!task) {
         return {
             success: false,

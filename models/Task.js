@@ -40,8 +40,8 @@ const taskSchema = new Schema({
 });
 
 const getRandomReward = () => {
-  const min = 100;
-  const max = Number(process.env.REWARD_SHRINKMEIO_TASK); // Chuyển đổi biến môi trường thành số
+  const min = 150;
+  const max = Number(process.env.REWARD_TASK); // Chuyển đổi biến môi trường thành số
 
   if (isNaN(max)) {
       throw new Error('REWARD_SHRINKMEIO_TASK không phải là một số hợp lệ');
@@ -50,14 +50,8 @@ const getRandomReward = () => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 taskSchema.pre('save', async function (next) {
-  
-  switch (this.nameTask) {
-    case 'shrinkMe':
-      this.reward = getRandomReward()
-      next()
-    default:
-      break;
-  }
+    this.reward = getRandomReward()
+    next()
   
 })
 
