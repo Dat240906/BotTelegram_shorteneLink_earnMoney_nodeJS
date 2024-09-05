@@ -48,7 +48,7 @@ const showInfoWhenWithDrawMoney = async (bot, msg) => {
 
 ⚠️ Lưu ý:
 
-📌 Min rút <b>10,000 đ</b>
+📌 Min rút <b>${parseInt(process.env.MIN_WITHDRAWMONEY, 10).toLocaleString()} đ</b>
 📌 Thời gian xử lí: <b>1-2 phút</b>  
 📌 Sai thông tin ngân hàng trong quá trình thanh toán vui lòng liên hệ ADMIN
 
