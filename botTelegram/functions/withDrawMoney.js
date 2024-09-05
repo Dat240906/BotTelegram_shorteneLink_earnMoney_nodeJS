@@ -41,7 +41,7 @@ const showInfoWhenWithDrawMoney = async (bot, msg) => {
     const typeBank = data.typeBank
     const nameBank = data.nameBank
     const numberAccountBank = data.numberAccountBank
-    let infoBank = `${typeBank} | ${numberAccountBank} | ${nameBank}`
+    let infoBank = `${typeBank} | ${await tools.maskStr(numberAccountBank, 3)} | ${await tools.maskStr(nameBank, 1)}`
     let context = `
 💰 Số dư: <b>${res_infoUser.data.balance.toLocaleString()} đ</b>
 💳 Thông tin ngân hàng: <b>${infoBank}</b> 

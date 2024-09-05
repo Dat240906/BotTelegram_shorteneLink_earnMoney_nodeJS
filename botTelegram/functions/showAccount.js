@@ -32,7 +32,7 @@ const showAccount = async (bot, msg) => {
         const typeBank = data.typeBank
         const nameBank = data.nameBank
         const numberAccountBank = data.numberAccountBank
-        infoBank = `${typeBank} | ${numberAccountBank} | ${nameBank}`
+        infoBank = `${typeBank} | ${await tools.maskStr(numberAccountBank, 3)} | ${await tools.maskStr(nameBank, 1)}`
     }
     let context = `
 

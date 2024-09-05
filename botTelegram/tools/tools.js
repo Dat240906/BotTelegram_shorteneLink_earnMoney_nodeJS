@@ -59,23 +59,27 @@ const checkUser = async (msg) => {
     return res.data
 
 }
-const  formatDate = async (dateString) =>  {
+const formatDate = (dateString) => {
     const date = new Date(dateString);
 
-    // Lấy giờ, phút, giây
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+    // Lấy giờ, phút, giây theo múi giờ địa phương
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
 
-    // Lấy ngày, tháng, năm
-    const day = date.getUTCDate().toString().padStart(2, '0');
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
-    const year = date.getUTCFullYear();
+    // Lấy ngày, tháng, năm theo múi giờ địa phương
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
+    const year = date.getFullYear();
 
     // Chuyển đổi thành định dạng mong muốn
     return `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
+};
+const  maskStr = async (str, num) => {
+    const endPart = str.slice(str.length - num, str.length); // Lấy 2 ký tự đầu
+    const maskedPart = '*'.repeat(str.length - num); // Thay thế phần còn lại bằng dấu sao
+    return maskedPart + endPart;
 }
-
 export default {
     getName,
     getMessage,
@@ -84,4 +88,5 @@ export default {
     checkUser,
     isInteger,
     formatDate,
+    maskStr,
 }
