@@ -7,8 +7,7 @@ const optionsButton = {
             ["👤 Thông Tin Tài Khoản", "🔐 Xác Thực Tài Khoản"],
             ["🎁 Nhiệm Vụ Kiếm Tiền"],
             ["💳 Chuyển Tiền", "💰 Rút Tiền"],
-            ["🛠 Hỗ Trợ Kỹ Thuật", "📜 Lịch Sử Giao Dịch"],
-            ['📰 Tin Tức Mới', '🏆 Thưởng Và Khuyến Mãi'],
+            ["📜 Lịch Sử Rút Tiền"],
             ['💬 Cộng Đồng'],
         ],
     wrongOtp: [

@@ -102,14 +102,14 @@ const handleMessage = async (bot, msg) => {
         return withDraw.showInfoWhenWithDrawMoney(bot, msg)
     }
     //công đồng
-    else if (message.toLowerCase() == optionsButton.all[5][0].toLowerCase()) {
+    else if (message.toLowerCase() == optionsButton.all[4][0].toLowerCase()) {
         // gửi link chuyển đến nhóm telegram
         
         bot.sendMessage(msg.chat.id, `<a href="${process.env.GROUP_SUPPORT}">Cộng đồng của chúng tôi, nơi bạn có thể giao lưu, trò chuyện</a>`, {parse_mode:"html"})
     }
 
     // show lịch sủ giao dịch
-    else if (message.toLowerCase() == optionsButton.all[3][1].toLowerCase()) {
+    else if (message.toLowerCase() == optionsButton.all[3][0].toLowerCase()) {
         return showHistoryTransactions(bot, msg)
     }
 
