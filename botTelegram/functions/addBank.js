@@ -24,8 +24,7 @@ const addBank = async (bot, msg) => {
     let nameBank = text_split[2].toUpperCase()
     let response = await addBankForUser({telegramId, typeBank, nameBank, numberAccountBank})
     if (!response.success) {
-        stateUsers[msg.from.id] = states.NONE
-        return sendMessageDefault(bot, chatId, messages.errorGetHistoryTransactions, optionsButton.all);
+        return sendMessageDefault(bot, chatId, `❌ <b>${response.message}</b>`, optionsButton.all);
     }
     stateUsers[msg.from.id] = states.NONE
     sendMessageDefault(bot, chatId, "✅ Thêm thành công", optionsButton.all) 

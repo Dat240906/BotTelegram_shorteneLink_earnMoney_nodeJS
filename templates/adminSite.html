@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #1e7d32;
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+
+    button {
+      background-color: #1e7d32;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #155d27;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .container-table {
+        overflow: auto;
+    }
+    #notificationStatus {
+      margin-top: 10px;
+      color: #1e7d32;
+    }
+  </style>
+</head>
+<body>
+    <h1 style="text-align: center;   
+    color: teal;">ADMIN DASHBOARD</h1>
+  <div class="main-content">
+    <section id="users">
+      <h2>Quản lý Người Dùng</h2>
+      <div class="container-table">
+          <table id="userTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tên</th>
+                <th>Telegram ID</th>
+                <th>Username</th>
+                <th>Số dư</th>
+                <th>Ngày tạo</th>
+                <th>Ngân hàng</th>
+                <th>Xác thực</th>
+              </tr>
+      
+            </thead>
+            <tbody>
+                <tr>
+                    <td>66d2f3cf4cd8a21945d338e8</td>
+                    <td>mi nguyen🦴</td>
+                    <td>7100816196</td>
+                    <td>kaibaxeto</td>
+                    <td>213</td>
+                    <td>2024-08-31T10:43:27.280Z</td>
+                    <td>66d83615f80f1de983158808</td>
+                    <td>Rồi</td>
+                  </tr>
+              <!-- Dữ liệu người dùng sẽ được thêm vào đây -->
+            </tbody>
+          </table>
+      </div>
+    </section>
+
+    <section id="transactions">
+      <h2>Giao Dịch Rút Tiền</h2>
+      <table id="transactionTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>ID Bank</th>
+            <th>ID Người Dùng</th>
+            <th>Thời Gian Tạo</th>
+            <th>Số Tiền</th>
+            <th>Trạng Thái</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>66dad926c77a7bf0c486b0a6</td>
+                <td>66dad91cc77a7bf0c486b098</td>
+                <td>66d9ef74345fa23985679eda</td>
+                <td>2024-09-06T10:27:50.798Z</td>
+                <td>2000</td>
+                <td>Đang xử lí</td>
+            </tr>
+          <!-- Dữ liệu giao dịch sẽ được thêm vào đây -->
+        </tbody>
+      </table>
+    </section>
+
+    <section id="notifications">
+      <h2>Cập nhật Thông Báo</h2>
+      <form id="notificationForm">
+        <textarea id="notificationText" rows="4" placeholder="Nhập thông báo mới..."></textarea>
+        <button type="submit">Cập nhật</button>
+      </form>
+      <div id="notificationStatus"></div>
+    </section>
+  </div>
+
+
+</body>
+</html>

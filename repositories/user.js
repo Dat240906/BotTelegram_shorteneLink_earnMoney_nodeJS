@@ -76,7 +76,9 @@ const addBank = async ({telegramId, typeBank, nameBank, numberAccountBank}) => {
     print(`Bank của tài khoản [@${user.username}] đã được thêm`, options.cyan.underline);
     return { success: true,code:0 ,message: 'Thêm bank thành công' };
   }catch (e) {
-    console.log(e)
+    if (e.code == 11000) {
+      return { success: false, code: 1, message: 'Tài khoản ngân hàng này đã tồn tại trong hệ thông, vui lòng nhập tài khoản khác' };
+    }
     return { success: false, message: `Lỗi bank: ${e?.message || e}` };
   }
 }
