@@ -89,7 +89,6 @@ const checkUserInGroup = async (bot, idUser)=> {
     try {
         const idGroup = process.env.ID_GROUP
         const chatMember = await bot.getChatMember(idGroup, idUser)
-        console.log(chatMember)
         return { 
             success: true,
             data: chatMember

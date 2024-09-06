@@ -17,7 +17,9 @@ router.get('/:telegramId',
 router.get('/bank/:telegramId', 
     userController.getDataBank
 )
- 
+router.post('/transfer-money', 
+    userController.transferMoney
+)
 router.post('/register', 
     userController.createUser
 )

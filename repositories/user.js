@@ -184,6 +184,41 @@ const updateEmail = async ({telegramId, email}) => {
     return { success: false, message: `Lỗi email: ${e?.message || e}` };
   }
 }
+
+
+const transferMoney = async ({telegramId, telegramIdTarget, money}) => {
+  console.log(`${telegramId} ${telegramIdTarget} ${money}`)
+  let user = await UserModel.findOne({telegramId}).exec();
+  if (!user) {
+    return { success: false, message: 'Không tìm thấy người chuyển' };
+  }
+  let userTarget = await UserModel.findOne({telegramId:telegramIdTarget}).exec()
+  if  (!userTarget) {
+    return { success: false, message: 'Không tìm thấy người nhận' };
+  }
+
+  if (user.balance < money) {
+    return { success: false, message: 'Số dư không đủ' };
+  }
+  // số dư đủ rồi,bắt dầu chuyển
+
+  user.balance -= money
+  userTarget.balance += money - (money*(2/100))
+
+  await user.save()
+  await userTarget.save()
+
+  return {
+    success: true,
+    message: 'Chuyển tiền thành công',
+    data: {
+      money: money,
+      userRecieved: userTarget,    
+      userSend: user,
+    }
+  }
+ 
+}
 export default {
   createUser,
   getUserById,
@@ -193,4 +228,5 @@ export default {
   updateEmail,
   getDataBank,
   withDrawMoney,
+  transferMoney,
 };

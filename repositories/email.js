@@ -22,7 +22,6 @@ const sendEmail = async ({telegramId}) => {
     let recipientName = user.name
     let secretGetOtp = user.secretGetOtp
     let otpCode = await OTPService.generateOTP(secretGetOtp)
-    console.log(`${recipientName}, ${secretGetOtp}, ${otpCode}`)
 
     let response = await emailService.sendEmail({emailClient, recipientName, otpCode})
     if (!response.success)  {

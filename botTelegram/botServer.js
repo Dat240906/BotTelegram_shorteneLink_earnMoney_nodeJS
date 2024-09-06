@@ -21,7 +21,6 @@ const runBotTelegram = async () => {
 
   bot.on('message', async (msg) => {
     if (msg.chat.id < 0) {
-      console.log(msg.chat.id)
       
       return 
     }

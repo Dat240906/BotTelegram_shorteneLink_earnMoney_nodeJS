@@ -132,6 +132,22 @@ const withDrawMoney = async (req, res) => {
     }
 }
 
+const transferMoney = async (req, res) => {
+    let dataUser = req.body
+    let response = await UserRepository.transferMoney(dataUser)
+    if  (response.success) {
+        res.status(statusCode.OK).json({
+            success: true,
+            data: response.data
+        })
+    }else {
+        res.status(statusCode.BAD_REQUEST).json({
+            success: false,
+            message: response.message
+        })
+    }
+}
+
 export default {
     getUserById,
     createUser,
@@ -141,4 +157,5 @@ export default {
     addBank,
     getDataBank,
     withDrawMoney,
+    transferMoney,
 }

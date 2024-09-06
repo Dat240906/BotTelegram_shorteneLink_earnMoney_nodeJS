@@ -24,6 +24,17 @@ Chúng tôi đã gửi mã OTP về hòm thư của bạn, nếu bạn không nh
 Vui lòng cũng cấp mã OTP gửi tới Email:
 </b>`,
     reqCodeTask:'<b>Vui Lòng cung cấp mã CODE nhiệm vụ: </b>',
+    reqTransferMoney:`
+<b>⚠️ Chú ý: </b>
+
+📌 <b>Dạng dữ liệu chấp nhận khi chuyển tiền</b>: <i>TelegramID Số_tiền</i>
+📌 <b>Phí chuyển tiền</b>: 2% số tiền chuyển
+📌 Ví dụ nếu bạn muốn chuyển tiền đến telegramID <i>123456789</i> với số tiền là <i>200,000đ</i> thì bạn sẽ ghi là:
+
+<code>123456789 200000</code>
+
+<b>Vui lòng cung cấp dữ liệu theo đúng dạng trên để tiến hành chuyển tiền: </b>
+`,
     wrongOtp: '<b>❌ OTP không đúng, hãy nhập lại:</b>',
     trueOtp: '<b>✅ Xác thực Email thành công, bạn có thể làm nhiệm vụ kiếm tiền</b>',
     trueActive: '<b>✅ Tài khoản đã xác thực </b>',
@@ -33,6 +44,8 @@ Vui lòng cũng cấp mã OTP gửi tới Email:
     errorAddBank: '<b>❌ Vui lòng nhập đúng định dạng: </b>',
     errorGetHistoryTransactions: '<b>❌ Xảy ra lõi trong quá trình lấy lịch sử giao dịch </b>',
     notInGroup: `<b>❌ Bạn chưa tham gia cộng đồng, hãy nhấn vào <a href="${process.env.GROUP_SUPPORT}">ĐÂY</a> để tham gia, sau đó thì có thể tiếp tục sử dụng dịch vụ</b>`,
+    errorData: `<b>❌ Vui lòng nhập theo đúng định dạng: </b>`,
+    transferSuccess: `<b>✅ Chuyển tiền thành công</b>`,
     // accountNotFound: '<b>❌ Tài khoản chưa được kích hoạt</b>'
 } 
 

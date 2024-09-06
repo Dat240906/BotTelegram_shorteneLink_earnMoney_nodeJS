@@ -11,6 +11,7 @@ import getDataBank from './getDataBank.js'
 import withDrawMoneyForUser from './withDrawMoneyForUser.js'
 import getHistoryTransactions from './getHistoryTransactions.js'
 import addBankForUser from './addBankForUser.js'
+import transferMoneyForUser from './transferMoneyForUser.js'
 export {
     addEmail,
     createUser,
@@ -25,4 +26,5 @@ export {
     withDrawMoneyForUser,
     getHistoryTransactions,
     addBankForUser,
+    transferMoneyForUser
 }

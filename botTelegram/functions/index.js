@@ -20,6 +20,7 @@ import task from './task.js'
 import withDraw from './withDrawMoney.js'
 import showHistoryTransactions from './showHistoryTransactions.js'
 import addBank from './addBank.js'
+import transferMoney from './transferMoney.js'
 
 const handleMessage = async (bot, msg) => {
     let idUser = msg.from.id
@@ -87,6 +88,14 @@ const handleMessage = async (bot, msg) => {
         stateUsers[idUser] = states.AWATING_CODE_TASK
         return sendMessageDefault(bot, idUser, messages.reqCodeTask, optionsButton.null)
     }
+
+    //chuyển tiền
+    else if (message.toLowerCase() == optionsButton.all[2][0].toLowerCase()) {
+        // chuyển tiền
+        stateUsers[idUser] = states.AWATING_DATA_TRANSFER_MONEY
+        return sendMessageDefault(bot, idUser, messages.reqTransferMoney, optionsButton.null)
+    }
+
     // rút tiền 
     else if (message.toLowerCase() == optionsButton.all[2][1].toLowerCase()) {
         stateUsers[idUser] = states.AWATING_NUMBER_MONEY_WITHDRAW
@@ -134,6 +143,11 @@ const handleMessage = async (bot, msg) => {
         else if (stateUsers[idUser] == states.AWATING_INFO_BANKING) {
             // xử lí đầu vào thông tin tài khoản ngân hàng
             return addBank(bot, msg)
+        }
+
+        //
+        else if (stateUsers[idUser] == states.AWATING_DATA_TRANSFER_MONEY) {
+            return transferMoney(bot, msg)
         }
         sendMessageDefault(bot, idUser, messages.elseMessage, optionsButton.all)
     }
