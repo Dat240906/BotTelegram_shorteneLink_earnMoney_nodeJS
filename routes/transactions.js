@@ -13,6 +13,12 @@ router.post('/add',
 router.get('/:idUser', 
     transactionsController.getTransacitonsForuser
 )
+router.get('/all/all', 
+    transactionsController.getTransactionsAll
+)
 
+router.post('/changeStatus', 
+    transactionsController.changeStatus
+)
 
 export default router

@@ -18,8 +18,38 @@ const addTransaction = async (req, res) => {
     })
 } 
 
+
+const changeStatus = async (req, res) => {
+    const response = await transacitonsRepository.changeStatus(req.body)
+    if (response.success) {
+        return res.status(statusCode.OK).json({
+            success: true,
+            data: response.data,
+        })
+    }
+    return res.status(statusCode.BAD_REQUEST).json({
+        success: false,
+        message: response.message,
+    })
+} 
+
+
 const getTransacitonsForuser =  async (req, res) => {
     const response = await transacitonsRepository.getTransactionsForUser({_idUser:req.params.idUser})
+    if (response.success) {
+        return res.status(statusCode.OK).json({
+            success: true,
+            data: response.data,
+        })
+    }
+    return res.status(statusCode.BAD_REQUEST).json({
+        success: false,
+        message: response.message,
+    })
+}
+
+const getTransactionsAll =  async (req, res) => {
+    const response = await transacitonsRepository.getTransactionsAll()
     if (response.success) {
         return res.status(statusCode.OK).json({
             success: true,
@@ -35,4 +65,6 @@ const getTransacitonsForuser =  async (req, res) => {
 export default {
     addTransaction,
     getTransacitonsForuser,
+    getTransactionsAll,
+    changeStatus,
 }

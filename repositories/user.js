@@ -19,6 +19,18 @@ const getUserById = async ({ telegramId }) => {
   }
 };
 
+const getAllUsers = async () => {
+  try {
+    const users = await UserModel.find();
+    if (!users || users.length === 0) {
+      return { success: false, message: 'User not found' };
+    }
+    return { success: true, data: users };
+  } catch (error) {
+    return { success: false, message: `Error finding user: ${error.message}` };
+  }
+};
+
 const createUser = async ({ telegramId, username, name }) => {
   try {
     const existingUser = await UserModel.findOne({ telegramId });
@@ -83,6 +95,15 @@ const addBank = async ({telegramId, typeBank, nameBank, numberAccountBank}) => {
   }
 }
 const getDataBank = async ({telegramId}) => {
+  let idBank_temp = '66d83615f80f1de983158808'
+  if (telegramId.length == idBank_temp.length) {
+    let bank = await BankModel.findOne({_id: telegramId})
+    console.log(bank)
+    return {
+      success: true,
+      data: bank
+    } 
+  }
   try {
     let user = await UserModel.findOne({telegramId}).exec()
     if (!user) {
@@ -102,6 +123,25 @@ const getDataBank = async ({telegramId}) => {
   }
 
 }
+
+const getAllDataBank = async () => {
+  try {
+    let banks = await BankModel.find().exec()
+    if (!banks) {
+      return { success: false, message: 'Không tìm thấy ngân hàng' };
+    }
+  
+    return {
+      success: true,
+      data: banks
+    } 
+  } catch (e) {
+    return { success: false, message: `Lỗi bank: ${e?.message || e}` };
+  }
+
+}
+
+
 const withDrawMoney = async ({telegramId, money}) => {
   let user = await UserModel.findOne({telegramId}).exec();
   if (!user) {
@@ -221,6 +261,64 @@ const transferMoney = async ({telegramId, telegramIdTarget, money}) => {
   }
  
 }
+
+const updateBalance = async (data) => {
+  for (let dataUser of data) {
+    let _id = dataUser._id;
+    let balance = parseInt(dataUser.balance, 10);
+    try {
+      // Cập nhật số dư cho người dùng
+      let resuilt = await UserModel.updateOne(
+        { _id },
+        { $set: { balance } }
+      );
+    
+    } catch (error) {
+      // Xử lý lỗi nếu có
+      console.error(`Failed to update user with ID: ${_id}. Error: ${error.message}`);
+      return {
+        success: false,
+        message: `Lỗi cập nhật số dư cho người dùng`,
+      }
+    }
+  }
+  return {
+    success: true,
+    message: `Cập nhật số dư cho người dùng thành công`,
+  }
+};
+
+const updateBanks = async (data) => {
+  for (let dataBank of data) {
+    let _id = dataBank._id
+    let typeBank = dataBank.typeBank;
+    let numberAccountBank = dataBank.numberAccountBank
+    let nameBank = dataBank.nameBank
+
+    try {
+      // Cập nhật số dư cho người dùng
+      let resuilt = await BankModel.updateOne(
+        { _id },
+        { $set: { typeBank, numberAccountBank, nameBank} }
+      );
+      console.log(resuilt)
+    
+    } catch (error) {
+      return {
+        success: false,
+        message: `Lỗi cập nhật ngân hàng người dùng`,
+      }
+    }
+  }
+  return {
+    success: true,
+    message: `Cập nhật ngân hàng người dùng thành công`,
+  }
+};
+
+
+
+
 export default {
   createUser,
   getUserById,
@@ -231,4 +329,9 @@ export default {
   getDataBank,
   withDrawMoney,
   transferMoney,
+  getAllUsers,
+  getAllDataBank,
+  updateBalance,
+  updateBanks,
 };
+

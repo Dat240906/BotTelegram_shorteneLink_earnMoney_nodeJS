@@ -10,6 +10,9 @@ const router = express.Router()
 router.get('/', (req, res)  => {
     res.send(NGROK_URL)
 })
+router.get('/all', 
+    userController.getAllUsers
+)
 
 router.get('/:telegramId', 
     userController.getUserById
@@ -20,6 +23,10 @@ router.get('/bank/:telegramId',
 router.post('/transfer-money', 
     userController.transferMoney
 )
+router.post('/updateBalance', 
+    userController.updateBalance
+)
+
 router.post('/register', 
     userController.createUser
 )

@@ -1,9 +1,26 @@
+import BankModel from "../models/Bank.js"
 import { UserRepository } from "../repositories/index.js"
 import statusCode from "../statusCode/statusCode.js"
 
 
 const getUserById = async (req, res) => {
     let response = await UserRepository.getUserById(req.params)
+    if (response.success) {
+        res.status(statusCode.OK).json({
+            success: true,
+            data: response.data
+        })
+    } else {
+        res.status(statusCode.BAD_REQUEST).json({
+            success: false,
+            message: response.message
+        })
+    }
+    
+} 
+
+const getAllUsers = async (req, res) => {
+    let response = await UserRepository.getAllUsers()
     if (response.success) {
         res.status(statusCode.OK).json({
             success: true,
@@ -99,6 +116,22 @@ const getDataBank = async (req, res) => {
         })
     }
 }
+const getAllDataBank = async (req, res) => {
+    let response = await UserRepository.getAllDataBank()
+    if  (response.success) {
+        res.status(statusCode.OK).json({
+            success: true,
+            data: response.data
+        })
+    }else {
+        res.status(statusCode.BAD_REQUEST).json({
+            success: false,
+            message: response.message
+        })
+    }
+}
+
+
 
 const updateEmail = async (req, res) => {
     let dataUser = req.body
@@ -147,6 +180,37 @@ const transferMoney = async (req, res) => {
         })
     }
 }
+const updateBalance = async (req, res) => {
+    let dataUser = req.body
+    let response = await UserRepository.updateBalance(dataUser)
+    if  (response.success) {
+        res.status(statusCode.OK).json({
+            success: true,
+            data: response.message
+        })
+    }else {
+        res.status(statusCode.BAD_REQUEST).json({
+            success: false,
+            message: response.message
+        })
+    }
+}
+
+const updateBanks = async (req, res) => {
+    let dataUser = req.body
+    let response = await UserRepository.updateBanks(dataUser)
+    if  (response.success) {
+        res.status(statusCode.OK).json({
+            success: true,
+            data: response.message
+        })
+    }else {
+        res.status(statusCode.BAD_REQUEST).json({
+            success: false,
+            message: response.message
+        })
+    }
+}
 
 export default {
     getUserById,
@@ -158,4 +222,8 @@ export default {
     getDataBank,
     withDrawMoney,
     transferMoney,
+    getAllUsers,
+    getAllDataBank,
+    updateBalance,
+    updateBanks,
 }

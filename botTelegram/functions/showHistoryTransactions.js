@@ -33,16 +33,11 @@ const showHistoryTransactions = async (bot, msg) => {
             let transaction = data[i]  
             let status = 'Đang xử lí ♻️'
             let time =await tools.formatDate(transaction.createdAt)
-            switch (transaction.status) {
-                case "pending":
-                    break;
-                case "success":
-                    status = 'Thành công ✅'
-                    break
-                case "faled":
-                    status = "Thất bại ❌"
-                default:
-                    break;
+            if (transaction.status == 'success') {
+                status = 'Thành công ✅'
+            }
+            else if (transaction.status == 'fail') {
+                status = "Thất bại ❌"
             }
             context += `<i>\n    ${i+1}, ${time} | ${transaction.bank} | ${transaction.money.toLocaleString()} đ | ${status}\n</i>`
         }

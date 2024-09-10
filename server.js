@@ -8,6 +8,8 @@ import {
   taskRouter,
   csbm_dksdRouter,
   transactionsRouter,
+  bankRouter,
+  adminRouter,
 } from './routes/index.js';
 import {
   options, 
@@ -18,6 +20,8 @@ import path from "path"
 import ejs from "ejs";
 import { fileURLToPath } from 'url';
 import {runBotTelegram} from './botTelegram/index.js';
+import cors from "cors"
+
 // Đọc các biến môi trường
 
 
@@ -33,6 +37,12 @@ const NGROK_URL = await startNgrokService()
 // Cấu hình Express
 const app = express();
 app.use(express.json());
+const corsOptions = {
+  origin: 'http://127.0.0.1:5500', // Thay đổi cho phù hợp với nguồn của bạn
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type'],
+};
+app.use(cors(corsOptions));
 
 // Đọc đường dẫn cho views
 const __filename = fileURLToPath(import.meta.url);
@@ -47,8 +57,10 @@ app.use('/users', userRouter);
 app.use('/email', emailServicesRouter);
 app.use('/otp', otpRouter);
 app.use('/task', taskRouter);
+app.use('/bank', bankRouter);
 app.use('/csbm-dksd', csbm_dksdRouter);
 app.use('/transactions', transactionsRouter);
+app.use('/admin', adminRouter);
 
 
 

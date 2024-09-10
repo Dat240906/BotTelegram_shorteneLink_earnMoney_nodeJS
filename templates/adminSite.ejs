@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      font-size: 17px;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #1e7d32;
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+
+    button {
+      background-color: #1e7d32;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    button:hover {
+      background-color: #155d27;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .container-table {
+        overflow: auto;
+        margin-bottom: 30px;
+    }
+    .container-table input {
+        background: transparent;
+        border: none;
+        font-size: 17px;
+    }
+    .container-table input:focus-visible {
+        outline: none;
+        background-color: teal;
+        color: white;
+    }
+    #notificationStatus {
+      margin-top: 10px;
+      color: #1e7d32;
+    }
+    .loading {
+        width: 40px;
+        display: none;
+    }
+    button:hover {
+        opacity: 0.7;
+    }
+    .save-change img {
+        width: 20px;
+        display: none;
+    }
+  </style>
+</head>
+<body>
+    <h1 style="text-align: center;   
+    color: teal;">ADMIN DASHBOARD</h1>
+  <div class="main-content">
+    <section id="users">
+        <h2>Quản lý Người Dùng</h2>
+        <div class="container-table">
+            <table id="userTable">
+                <thead>
+                    <tr>
+                        <th>ID Người Dùng</th>
+                        <th>Tên</th>
+                        <th>Số dư</th>
+                        <th>ID Ngân hàng</th>
+                        <th>Email</th>
+                        <th>ID Telegram</th>
+                        <th>Username</th>
+                        <th>Ngày tạo</th>
+                        <th>Xác thực</th>
+                        </tr>
+
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <img class="loading loading-users" src="./loading.gif" alt="">
+            <button class="save-change" onclick="saveChangeUser(this)">LƯU THAY ĐỔI <img src="./loading.gif" alt="" srcset=""></button>
+        </div>
+    </section>
+
+    <section id="banks">
+        <h2>Quản Lí Ngân Hàng</h2>
+        <div class="container-table">
+  
+            <table id="banksTable">
+              <thead>
+                <tr>
+                  <th>ID Ngân Hàng</th>
+                  <th>Tên Ngân Hàng</th>
+                  <th>Số Tài Khoản</th>
+                  <th>Tên Tài Khoản</th>
+                </tr>
+              </thead>
+              <tbody>
+                  
+                <!-- Dữ liệu giao dịch sẽ được thêm vào đây -->
+              </tbody>
+            </table>
+            <img class="loading loading-banks" src="./loading.gif" alt="">
+            <button class="save-change" onclick="saveChangeBank(this)">LƯU THAY ĐỔI <img src="./loading.gif" alt="" srcset=""></button>
+        </div>
+    </section>
+    <section id="transactions">
+      <h2>Giao Dịch Rút Tiền</h2>
+      <div class="container-table">
+
+          <table id="transactionTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Thời Gian</th>
+                <th>Tên Ngân Hàng</th>
+                <th>Số Tài Khoản</th>
+                <th>Tên Tài Khoản</th>
+                <th>Số Tiền</th>
+                <th>Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody>
+                
+              <!-- Dữ liệu giao dịch sẽ được thêm vào đây -->
+            </tbody>
+          </table>
+          <img class="loading loading-transactions" src="./loading.gif" alt="">
+      </div>
+    </section>
+
+    <section id="notifications">
+      <h2>Cập nhật Thông Báo</h2>
+      <form id="notificationForm">
+        <textarea id="notificationText" rows="4" placeholder="Nhập thông báo mới..."></textarea>
+        <button type="submit">Cập nhật</button>
+      </form>
+      <div id="notificationStatus"></div>
+    </section>
+  </div>
+  <script>
+    const formatDate = (dateString) => {
+    const date = new Date(dateString);
+
+    // Lấy giờ, phút, giây theo múi giờ địa phương
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+
+    // Lấy ngày, tháng, năm theo múi giờ địa phương
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
+    const year = date.getFullYear();
+
+    // Chuyển đổi thành định dạng mong muốn
+    return `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
+};
+  </script>
+  <script>
+    // Định nghĩa baseURL
+    const baseURL = 'http://localhost:3002';
+
+    // Hàm gọi API
+    const callAPI = async (url, method = 'GET', data = null) => {
+      // Tạo đối tượng tùy chọn cho fetch
+      const options = {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      };
+
+      // Nếu có dữ liệu và phương thức không phải là GET, thêm dữ liệu vào body
+      if (data) {
+        if (method === 'GET') {
+          // Đối với GET, dữ liệu phải được đưa vào URL dưới dạng query params
+          const queryParams = new URLSearchParams(data).toString();
+          url += (url.includes('?') ? '&' : '?') + queryParams;
+        } else {
+          options.body = JSON.stringify(data);
+        }
+      }
+
+      try {
+        // Gọi API bằng fetch
+        const response = await fetch(baseURL + url, options);
+
+        // Kiểm tra mã trạng thái HTTP
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        // Trả về đối tượng Response
+        return response;
+      } catch (error) {
+        console.error('API call failed:', error);
+        throw error;
+      }
+    }
+
+    const getDataUsers = async () => {
+        const loading = document.querySelector('.loading-users') 
+        loading.style.display = 'block'
+
+        const tbodyTableUsers = document.querySelector('#userTable tbody')
+        tbodyTableUsers.innerHTML = ""
+        let response = await callAPI('/users/all') 
+        let jsonResponse = await response.json()
+        if (!jsonResponse.success) {
+            return console.log('Không thể lấy được Users')
+        }
+        loading.style.display = 'none'
+        let data = jsonResponse.data
+        if (data.length == 0) {
+            tbodyTableUsers.innerHTML += '<h1 style="color:red">Trống<h1>'
+        }
+        data = data.reverse()
+        data.forEach(user => {
+           const tagData = `
+            <tr>
+                <td class="idUser">${user._id}</td>
+                <td>${user.name}</td>
+                <td class="balanceUser"><input class="userbalance" value="${user.balance.toLocaleString()}"></input></td>
+                <td>${user.bank ==undefined ? "❌": user.bank }</td>
+                <td>${user.email == undefined ? "❌": user.email}</td>
+                <td>${user.telegramId}</td>
+                <td>${user.username}</td>
+                <td>${formatDate(user.createdAt)}</td>
+                <td>${user.isActive ? '✅' : '❌'}</td>
+            </tr>
+           ` 
+            tbodyTableUsers.innerHTML += tagData
+                
+        });
+ 
+    }
+    const getDataTransactions = async () => {
+        const loading = document.querySelector('.loading-transactions') 
+        loading.style.display = 'block'
+
+        const tbodyTableTransactions = document.querySelector('#transactionTable tbody')
+        tbodyTableTransactions.innerHTML =""
+        let response = await callAPI('/transactions/all/all') 
+        let jsonResponse = await response.json()
+        if (!jsonResponse.success) {
+            return console.log('Không thể lấy được Giao Dịch')
+        }
+        loading.style.display = 'none'
+        let data = jsonResponse.data
+
+        if (data.length == 0) {
+            tbodyTableTransactions.innerHTML += '<h1 style="color:red">Trống<h1>'
+        }
+        data = data.reverse()
+        for (let transaction of data) {
+            let statusTransaction = ''
+            if (transaction.status == 'pending'){
+                statusTransaction = `
+                <button onclick="handleActionTransaction(this)" style="background-color:green;">Thành công ✅</button>
+                <button onclick="handleActionTransaction(this)" style="background-color:#222;">Từ chối ❌</button>
+                `
+            }else if (transaction.status == 'success') {
+                statusTransaction = '✅'
+            }else {
+                statusTransaction = '❌'
+            }
+            const dataBank_response = await callAPI(`/users/bank/${transaction.bank}`)
+            const dataBank_response_json = await dataBank_response.json()
+            const typeBank = dataBank_response_json.data.typeBank
+            const nameBank = dataBank_response_json.data.nameBank
+            const numberAccountBank = dataBank_response_json.data.numberAccountBank
+
+            const tagData = `
+            <tr>
+                <td class="idTransaction">${transaction._id}</td>
+                <td>${formatDate(transaction.createdAt)}</td>
+                <td>${typeBank}</td>
+                <td>${numberAccountBank}</td>
+                <td>${nameBank}</td>
+                <td>${transaction.money.toLocaleString()}</td>
+                <td>${statusTransaction}</td>
+            </tr>
+           `
+            tbodyTableTransactions.innerHTML += tagData
+                
+        };
+
+    }
+
+    const getDataBanks = async ()=> {
+        const loading = document.querySelector('.loading-banks') 
+        loading.style.display = 'block'
+        const tbodyTableBanks = document.querySelector('#banksTable tbody')
+        tbodyTableBanks.innerHTML = ""
+        let response = await callAPI('/bank/all')
+        let jsonResponse = await response.json()
+        if (!jsonResponse.success) {
+            return console.log('Không thể lấy được Ngân Hàng')
+        }
+        loading.style.display = 'none'
+        let data = jsonResponse.data
+        if (data.length == 0) {
+            tbodyTableBanks.innerHTML += '<h1 style="color:red">Trống<h1>'
+        }
+
+        data.forEach(bank => {
+            const tagData = `
+            <tr>
+                <td class="idBank">${bank._id}</td>
+                <td class="typeBank"><input value="${bank.typeBank}"></input></td>
+                <td class="numberAccountBank"><input value="${bank.numberAccountBank}"></input></td>
+                <td class="nameBank"><input value="${bank.nameBank}"></input></td>
+            </tr>
+            `
+            tbodyTableBanks.innerHTML += tagData
+                
+        });
+
+    }
+
+    const API_updateBalanceUser = async (data) => {
+        let response = await callAPI('/users/updateBalance', 'POST', data)
+        let jsonResponse = await response.json()
+        if (!jsonResponse.success) {
+            console.log('Không thể cập nhật tài khoản')
+            return
+        }
+        console.log('Cập nhật thành công!')
+        getDataUsers()
+    }
+
+    const API_updateBanks = async (data) => {
+        let response = await callAPI('/bank/updateBanks', 'POST', data)
+        let jsonResponse = await response.json()
+        if (!jsonResponse.success) {
+            console.log('Không thể cập nhật tài khoản')
+            return
+        }
+        console.log('Cập nhật thành công!')
+        getDataBanks()
+    }
+
+    const saveChangeUser = async (buttonElement) => {
+        const loading = buttonElement.querySelector('img')
+        loading.style.display = 'block'
+        const container_table = buttonElement.closest('.container-table')
+        const all_tagTr = container_table.querySelectorAll('tbody tr')
+        const data = []
+        all_tagTr.forEach(tagTr => {
+            const tagIdUser = tagTr.querySelector('td.idUser')
+            const tagBalanceUser = tagTr.querySelector('input.userbalance')
+            let balanceUser = tagBalanceUser.value
+            try{ 
+                let idUser = tagIdUser.textContent  
+                data.push({
+                    _id:  idUser,
+                    balance: balanceUser
+                })
+            }catch (e) {
+                console.log(e)
+            }
+
+        })
+        await API_updateBalanceUser(data)
+        loading.style.display = 'none'
+    }
+
+    const saveChangeBank = async (buttonElement) => {
+        const loading = buttonElement.querySelector('img')
+        loading.style.display = 'block'
+        const container_table = buttonElement.closest('.container-table')
+        const all_tagTr = container_table.querySelectorAll('tbody tr')
+        const data = []
+        all_tagTr.forEach(tagTr => {
+            const idBank = tagTr.querySelector('td.idBank').textContent
+            console.log(idBank)
+            const typeBank = tagTr.querySelector('td.typeBank input').value
+            const numberAccountBank = tagTr.querySelector('td.numberAccountBank input').value
+            const nameBank = tagTr.querySelector('td.nameBank input').value
+            try{ 
+                data.push({
+                    _id:  idBank,
+                    typeBank,
+                    numberAccountBank,
+                    nameBank,
+                })
+            }catch (e) {
+                console.log(e)
+            }
+
+        })
+        await API_updateBanks(data)
+        loading.style.display = 'none'
+    }
+
+    const handleActionTransaction = async (buttonelement) =>{
+        let action = buttonelement.textContent
+        let tr_Tag = buttonelement.closest('tr')
+        let idTransaction = tr_Tag.querySelector('td.idTransaction').textContent
+        let dataAction = ''
+        if (action.includes('Thành công')) {
+            // callApi kem theo id voi status chuyen thanh fail
+            dataAction = 'success'
+        }else if (action.includes('Từ chối')) {
+            // call api kem theo id voi status chuyen thanh fail
+            dataAction = 'fail'
+        }
+        let data = {
+            _id: idTransaction,
+            action: dataAction
+        }
+        const response = await callAPI('/transactions/changeStatus', 'POST', data)
+        const response_json = await response.json()
+
+        if (!response_json.success) {
+            return 
+        }
+        getDataTransactions()
+    }
+
+    getDataUsers()
+    getDataTransactions()
+    getDataBanks()
+  </script>
+
+  <script>
+
+  </script>
+</body>
+</html>
