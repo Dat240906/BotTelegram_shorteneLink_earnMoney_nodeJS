@@ -101,8 +101,10 @@
         display: none;
     }
   </style>
+  
 </head>
 <body>
+  <button hidden id="HOST"><%- HOST %></button>
     <h1 style="text-align: center;   
     color: teal;">ADMIN DASHBOARD</h1>
   <div class="main-content">
@@ -208,7 +210,7 @@
   </script>
   <script>
     // Định nghĩa baseURL
-    const baseURL = 'http://localhost:3002';
+    const baseURL = document.querySelector('#HOST').textContent;
 
     // Hàm gọi API
     const callAPI = async (url, method = 'GET', data = null) => {

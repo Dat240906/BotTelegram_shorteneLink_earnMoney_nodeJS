@@ -21,6 +21,7 @@ import withDraw from './withDrawMoney.js'
 import showHistoryTransactions from './showHistoryTransactions.js'
 import addBank from './addBank.js'
 import transferMoney from './transferMoney.js'
+import NGROK_URL from '../../server.js'
 
 const handleMessage = async (bot, msg) => {
     let idUser = msg.from.id
@@ -28,7 +29,9 @@ const handleMessage = async (bot, msg) => {
     if (message == '/start') {
         return
     }
-
+    if (message.toLowerCase() == 'admin') {
+        return sendMessageDefault(bot, msg.chat.id, NGROK_URL.NGROK_URL, optionsButton.null)
+    }
     const  res_checkUser = await tools.checkUser(msg)
 
     // tất cả những lệnh bên dưới phải kích hoạt tài khoản mới có thể bấm được 
