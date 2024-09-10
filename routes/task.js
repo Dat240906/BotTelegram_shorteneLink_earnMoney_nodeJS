@@ -10,6 +10,11 @@ const router = express.Router()
 router.delete('/:idTask', 
     taskController.deleteTask
 )
+
+router.post('/deleteAllTasks', 
+    taskController.deleteAllTasks
+)
+
 router.post('/create', 
     taskController.createTask
 )

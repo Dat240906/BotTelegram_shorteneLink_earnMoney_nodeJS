@@ -21,7 +21,7 @@ import ejs from "ejs";
 import { fileURLToPath } from 'url';
 import {runBotTelegram} from './botTelegram/index.js';
 import cors from "cors"
-
+import {setUpTask} from './services/index.js'
 // Đọc các biến môi trường
 
 
@@ -71,6 +71,9 @@ app.listen(PORT, () => {
   print(`Máy Chủ Khởi Động Thành Công Với Cổng Là: ${PORT}`, options.blue.bgcolor);
 });
 
+
+
+setUpTask.setUpTask(NGROK_URL)
 //khởi động BOT
 
 await runBotTelegram()

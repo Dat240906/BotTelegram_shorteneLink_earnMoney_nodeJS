@@ -9,7 +9,9 @@ import {
 } from '../utils/logColor.js'
 import NGROK_URL from '../server.js'
 import crypto from 'crypto'
-import {typeTasks} from '../storages/index.js'
+import {
+    typeTasks,
+} from '../storages/index.js'
 import task from "../controllers/task.js";
 import {createShortenLink} from "../services/index.js";
 
@@ -81,9 +83,10 @@ export const randomChar = async (length = 6) => {
     }
 };
 const createTask = async (typeTask, quantity, nameTask, linkRef) => {
-    if (typeTask.toLowerCase() == typeTasks.SHORTENLINK.toLowerCase()) {
+    
+    if (typeTask.toLowerCase() == typeTasks.typeTasks.SHORTENLINK.toLowerCase()) {
         return await createTask_SHORTENLINK(nameTask, quantity)
-    }else if (typeTask.toLowerCase() == typeTasks.REGISTERACCOUNT.toLowerCase()) {
+    }else if (typeTask.toLowerCase() == typeTasks.typeTasks.REGISTERACCOUNT.toLowerCase()) {
         return await createTask_REGISTERACCOUNT(nameTask, linkRef)
     }
     
@@ -100,7 +103,7 @@ const createTask_REGISTERACCOUNT = async (nameTask, linkRef) => {
             shortLink:linkRef,
             code: await randomChar(12),
             nameTask,
-            typeTask: typeTasks.REGISTERACCOUNT
+            typeTask: typeTasks.typeTasks.REGISTERACCOUNT
         })
         await newTask.save()
         print(`Có nhiệm vụ đăng ký tài khoản từ ${nameTask} được khởi tạo`, options.blue.underline)
@@ -165,7 +168,7 @@ const createTask_SHORTENLINK = async (nameTask, quantity) => {
                 shortLink: shortenLink_byService,
                 code,
                 nameTask,
-                typeTask: typeTasks.SHORTENLINK
+                typeTask: typeTasks.typeTasks.SHORTENLINK
             });
 
             await newTask.save();
@@ -305,6 +308,19 @@ const deleteTask = async ({idTask}) =>  {
         message: 'Xóa task thành công',
     }
 }
+const deleteAllTasks = async () => {
+    let tasks = await TaskModel.deleteMany().exec()
+    if (!tasks) {
+        return {
+            success: false,
+            message: 'Task not found',
+        }
+    }
+    return {
+        success: true,
+        message: 'Xóa tất cả task thành công',
+    }
+}
 
 
 export default {
@@ -313,4 +329,5 @@ export default {
     signTask,
     getQuantityTaskForUser,
     deleteTask,
+    deleteAllTasks,
 };

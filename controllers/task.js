@@ -61,6 +61,22 @@ const deleteTask = async (req, res) => {
     return res.send(response)
 }
 
+const deleteAllTasks = async (req, res) => {
+    let response = await TaskRepository.deleteAllTasks()
+    if (!response.success) {
+        return res.status(statusCode.BAD_REQUEST).json({
+            success: false,
+            message: response.message,
+        })
+    }
+    return res.status(statusCode.OK).json({
+        success: true,
+        message: response.message,
+    })
+}
+
+
+
 const validateTask = async (req, res) => {
     let response = await TaskRepository.validateCodeReward(req.body)
     return res.send(response)
@@ -75,4 +91,5 @@ export default {
     showCompletedCodeReward,
     validateTask,
     deleteTask,
+    deleteAllTasks,
 }
