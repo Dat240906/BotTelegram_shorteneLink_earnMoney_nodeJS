@@ -1,6 +1,8 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
 import connectDB from './database/database.js';
+import cron from 'node-cron'
+
 import {
   userRouter,
   emailServicesRouter,
@@ -74,6 +76,15 @@ app.listen(PORT, () => {
 
 
 setUpTask.setUpTask(NGROK_URL)
+cron.schedule('0 0 * * *', async () => {
+  try {
+    await setUpTask.setUpTask(NGROK_URL)
+    print('Đã Reset Tasks', options.blue.bgcolor)
+  } catch (error) {
+    console.error('Có lỗi xảy ra:', error);
+  }
+});
+
 //khởi động BOT
 
 await runBotTelegram()
